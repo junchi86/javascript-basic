@@ -1,51 +1,38 @@
-// <⚠️ DONT DELETE THIS ⚠️>
-import "./styles.css";
-// <⚠️ /DONT DELETE THIS ⚠️>
-
 // view
-const BODY = document.querySelector("body");
-const TITLE = document.createElement("h1");
-TITLE.innerText = "This is MY ToDos";
+const BODY = document.querySelector('body');
+const TITLE = document.createElement('h1');
+TITLE.innerText = 'This is MY ToDos';
 BODY.appendChild(TITLE);
 
-const FORM = document.createElement("form");
-FORM.setAttribute("type", "submit");
+const FORM = document.createElement('form');
+FORM.setAttribute('type', 'submit');
 BODY.appendChild(FORM);
 
-const INPUT = document.createElement("input");
-INPUT.placeholder = "Write ToDo!";
-INPUT.setAttribute("type", "text");
+const INPUT = document.createElement('input');
+INPUT.placeholder = 'Write ToDo!';
+INPUT.setAttribute('type', 'text');
 FORM.appendChild(INPUT);
 
-const CLEAR = document.createElement("button");
-CLEAR.innerText = "Clear-전체 제거";
+const CLEAR = document.createElement('button');
+CLEAR.innerText = 'Clear-전체 제거';
 FORM.after(CLEAR);
 
-//기능 추가 전체 클리어
-CLEAR.addEventListener("click", e => {
-  e.preventDefault();
-  localStorage.setItem(TODOS, JSON.stringify([]));
-  localStorage.setItem(TODOS_FINISHED, JSON.stringify([]));
-  location.reload();
-});
-//
-
-const PENDING = document.createElement("h2");
-PENDING.innerText = "PENDING";
+const PENDING = document.createElement('h2');
+PENDING.innerText = 'PENDING';
 BODY.appendChild(PENDING);
 
-const FINISHED = document.createElement("h2");
-FINISHED.innerText = "FINISHED";
+const FINISHED = document.createElement('h2');
+FINISHED.innerText = 'FINISHED';
 BODY.appendChild(FINISHED);
 
 //controllers
-const inputForm = document.querySelector("form");
-const inputField = document.querySelector("input");
-const pendingTodos = document.createElement("ul");
-const finishedTodos = document.createElement("ul");
+const inputForm = document.querySelector('form');
+const inputField = document.querySelector('input');
+const pendingTodos = document.createElement('ul');
+const finishedTodos = document.createElement('ul');
 
-const TODOS = "pendings";
-const TODOS_FINISHED = "finished";
+const TODOS = 'pendings';
+const TODOS_FINISHED = 'finished';
 
 let todos = [];
 let finTodos = [];
@@ -76,16 +63,12 @@ const loadStorageFinished = () => {
 
 const saveTodos = () => {
   localStorage.setItem(TODOS, JSON.stringify(todos));
-};
-const saveFinished = () => {
   localStorage.setItem(TODOS_FINISHED, JSON.stringify(finTodos));
 };
 
 const clearTodos = e => {
   const btn = e.target;
   const li = btn.parentNode;
-
-  pendingTodos.removeChild(li);
   const cleanTodo = todos.filter(i => {
     return i.id !== parseInt(li.id);
   });
@@ -95,7 +78,7 @@ const clearTodos = e => {
     li.id = i + 1;
   }
   saveTodos();
-  location.reload();
+  loadStorage();
 };
 
 const clearFinTodos = e => {
@@ -111,7 +94,7 @@ const clearFinTodos = e => {
     finTodos[i].id = i + 1;
     li.id = i + 1;
   }
-  saveFinished();
+  saveTodos();
   location.reload();
 };
 
@@ -132,7 +115,6 @@ const toFinished = e => {
     li.id = i + 1;
   }
   saveTodos();
-  saveFinished();
   location.reload();
 };
 
@@ -153,47 +135,55 @@ const toPending = e => {
     li.id = i + 1;
   }
   saveTodos();
-  saveFinished();
   location.reload();
 };
 
 const paintTodos = (id, text) => {
-  const pendingInnerTodos = document.createElement("li");
-  const deleteButton = document.createElement("button");
-  const modeButton = document.createElement("button");
+  const pendingInnerTodos = document.createElement('li');
+  const deleteButton = document.createElement('button');
+  const modeButton = document.createElement('button');
 
   pendingInnerTodos.innerText = `${text}`;
   pendingTodos.appendChild(pendingInnerTodos);
 
-  deleteButton.innerText = "✔";
+  deleteButton.innerText = '✔';
   pendingInnerTodos.appendChild(deleteButton);
-  deleteButton.addEventListener("click", clearTodos);
+  deleteButton.addEventListener('click', clearTodos);
 
-  modeButton.innerText = "🔻";
+  modeButton.innerText = '🔻';
   pendingInnerTodos.appendChild(modeButton);
-  modeButton.addEventListener("click", toFinished);
+  modeButton.addEventListener('click', toFinished);
   pendingInnerTodos.id = id;
   PENDING.appendChild(pendingTodos);
 };
 
 const paintFinTodos = (id, text) => {
-  const finInnerTodos = document.createElement("li");
-  const deleteButton = document.createElement("button");
-  const modeButton = document.createElement("button");
+  const finInnerTodos = document.createElement('li');
+  const deleteButton = document.createElement('button');
+  const modeButton = document.createElement('button');
 
   finInnerTodos.innerText = `${text}`;
   finishedTodos.appendChild(finInnerTodos);
 
-  deleteButton.innerText = "✔";
+  deleteButton.innerText = '✔';
   finInnerTodos.appendChild(deleteButton);
-  deleteButton.addEventListener("click", clearFinTodos);
+  deleteButton.addEventListener('click', clearFinTodos);
 
-  modeButton.innerText = "🔺";
+  modeButton.innerText = '🔺';
   finInnerTodos.appendChild(modeButton);
-  modeButton.addEventListener("click", toPending);
+  modeButton.addEventListener('click', toPending);
   finInnerTodos.id = id;
   FINISHED.appendChild(finishedTodos);
 };
+
+//기능 추가 전체 클리어
+CLEAR.addEventListener('click', e => {
+  e.preventDefault();
+  localStorage.setItem(TODOS, JSON.stringify([]));
+  localStorage.setItem(TODOS_FINISHED, JSON.stringify([]));
+  location.reload();
+});
+//
 
 //인풋서브밋
 const inputSubmit = e => {
@@ -205,12 +195,12 @@ const inputSubmit = e => {
   todos.push({ id, text });
   paintTodos(id, text);
   saveTodos();
-  inputField.value = "";
+  inputField.value = '';
 };
 
 const init = () => {
   loadStorage();
   loadStorageFinished();
-  inputForm.addEventListener("submit", inputSubmit);
+  inputForm.addEventListener('submit', inputSubmit);
 };
 init();
